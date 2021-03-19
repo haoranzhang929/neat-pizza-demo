@@ -1,0 +1,32 @@
+import express from "express";
+import multer from "multer";
+import path from "path";
+import config from "config";
+
+import { ServerConfig } from "./common/model";
+import { Config, AppEnv } from "./common/enum";
+import { REACT_APP_DIR, REACT_ENTRY_FILE } from "./common/constant";
+
+const { host, port } = config.get<ServerConfig>(Config.Server);
+const appEnv = config.get<AppEnv>(Config.AppEnv);
+
+const app = express();
+const upload = multer();
+
+if (appEnv === AppEnv.Prod) {
+  // server react app using express.js in production
+  app.use(express.static(path.join(__dirname, REACT_APP_DIR)));
+  app.get("/*", function (__req, res) {
+    res.sendFile(path.join(`${__dirname}/`, REACT_APP_DIR, REACT_ENTRY_FILE));
+  });
+}
+
+app.post("/api/image", upload.single("image"), async (req, res) => {
+  const imageFile = req.file;
+  console.log(imageFile);
+  res.send("ok");
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on http://${host}:${port}`);
+});

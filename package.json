@@ -1,0 +1,47 @@
+{
+  "name": "react-express-ts-full-stack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/index",
+    "dev": "npm run typecheck && concurrently \"npm run server\" \"npm run client\"",
+    "test": "npm run test --prefix client",
+    "test:watch": "npm run test:watch --prefix client",
+    "client": "npm start --prefix client",
+    "server": "npm run lint:server && nodemon server/index.ts",
+    "build": "npm run build:server && npm run build:client && mv ./client/build/ ./dist/client",
+    "build:client": "npm run build --prefix client",
+    "build:server": "tsc --project ./",
+    "typecheck": "echo 'Type Checking...' && tsc --noEmit && echo 'Type Checking Completed'",
+    "lint:server": "echo 'Server Code Lint Checking...' && eslint --ext .js,.jsx,.ts,.tsx server && echo 'Lint Checking Completed'",
+    "iall": "npm i && cd client && npm i && cd .."
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "author": "Haoran Zhang",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.6",
+    "express": "^4.17.1",
+    "multer": "^1.4.2"
+  },
+  "devDependencies": {
+    "@types/config": "0.0.38",
+    "@types/express": "^4.17.11",
+    "@types/multer": "^1.4.5",
+    "@types/node": "^14.14.35",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "concurrently": "^6.0.0",
+    "eslint": "^7.22.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  }
+}
