@@ -1,37 +1,25 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import ImageUpload from "./ImageUpload";
-import ImagePreview from "./ImagePreview";
+import ImageUploader from "./ImageUploader";
+import ImagesViewer from "./ImagesViewer";
+
+import { Routes } from "../common/enum";
+
+const routes = [
+  { path: Routes.Home, component: ImageUploader, exact: true },
+  { path: Routes.ViewUploads, component: ImagesViewer, exact: true }
+];
 
 function App() {
-  const [imageToUpload, setImageToUpload] = useState<File>();
-
-  const handleUpload = () => {
-    if (imageToUpload) {
-      console.log("Upload Image");
-      const data = new FormData();
-      data.append("image", imageToUpload);
-      axios
-        .post("/api/image", data, { headers: { "Content-type": "multipart/form-data" } })
-        .then(data => {
-          if (data.status === 200) {
-            setImageToUpload(undefined);
-          }
-        })
-        .catch(err => console.log(err));
-    }
-  };
-
   return (
-    <div>
-      <h1>Full Stack App Template</h1>
-      <ImageUpload setImageToUpload={setImageToUpload} />
-      <button disabled={!imageToUpload} onClick={handleUpload}>
-        Upload
-      </button>
-      {imageToUpload && <ImagePreview imageToUpload={imageToUpload} />}
-    </div>
+    <Router>
+      <Switch>
+        {routes.map((route, i) => (
+          <Route key={`route-${i}`} {...route} />
+        ))}
+      </Switch>
+    </Router>
   );
 }
 
