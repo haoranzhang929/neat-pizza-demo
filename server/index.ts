@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import config from "config";
+import axios from "axios";
 
 import { ServerConfig } from "./common/model";
 import { Config, AppEnv } from "./common/enum";
@@ -26,6 +27,19 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
   console.log(imageFile);
   await new Promise(r => setTimeout(r, 1000));
   res.send("ok");
+});
+
+app.get("/api/images", async (req, res) => {
+  try {
+    // mock images
+    const imagesRes = await axios.get<{ id: string; url: string; download_url: string }[]>(
+      "https://picsum.photos/v2/list"
+    );
+    res.json(imagesRes.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ errorMessage: "Error retrieving images" });
+  }
 });
 
 app.listen(port, () => {
