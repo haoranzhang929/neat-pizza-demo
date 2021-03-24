@@ -24,6 +24,7 @@ if (appEnv === AppEnv.Prod) {
 app.post("/api/image", upload.single("image"), async (req, res) => {
   const imageFile = req.file;
   console.log(imageFile);
+  await new Promise(r => setTimeout(r, 1000));
   res.send("ok");
 });
 

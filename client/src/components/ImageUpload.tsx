@@ -1,25 +1,45 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
+import clsx from "clsx";
 import Dropzone from "react-dropzone";
 
+import Typography from "@material-ui/core/Typography";
+
+import { useStyles } from "./ImageUpload.style";
+
 interface ImageUploadProps {
-  setImageToUpload: Dispatch<SetStateAction<File | undefined>>;
+  handleSelectImage: (image: File) => void;
+  success: boolean;
 }
 
-const ImageUpload = ({ setImageToUpload }: ImageUploadProps) => (
-  <Dropzone
-    maxFiles={1}
-    multiple={false}
-    onDrop={acceptedFiles => setImageToUpload(acceptedFiles[0])}
-  >
-    {({ getRootProps, getInputProps }) => (
-      <section>
-        <div {...getRootProps()}>
-          <input {...getInputProps()} accept="image/*" />
-          <p>Drag n drop some files here, or click to select files</p>
-        </div>
-      </section>
-    )}
-  </Dropzone>
-);
+const ImageUpload = ({ handleSelectImage, success }: ImageUploadProps) => {
+  const { dropContainer, activeStyle, uploadSuccess } = useStyles();
+
+  return (
+    <Dropzone
+      maxFiles={1}
+      multiple={false}
+      onDrop={acceptedFiles => handleSelectImage(acceptedFiles[0])}
+      disabled={success}
+    >
+      {({ getRootProps, getInputProps, isDragActive }) => (
+        <section>
+          <div
+            className={clsx(
+              dropContainer,
+              { [activeStyle]: isDragActive },
+              { [uploadSuccess]: success }
+            )}
+            {...getRootProps()}
+          >
+            <input {...getInputProps()} accept="image/*" />
+            <Typography variant="body1" align="center">
+              Drag n drop your photo here, or click to select a photo
+            </Typography>
+          </div>
+        </section>
+      )}
+    </Dropzone>
+  );
+};
 
 export default ImageUpload;
