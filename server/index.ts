@@ -33,7 +33,7 @@ app.get("/api/images", async (req, res) => {
   try {
     // mock images
     const imagesRes = await axios.get<{ id: string; url: string; download_url: string }[]>(
-      "https://picsum.photos/v2/list"
+      "https://picsum.photos/v2/list?limit=10"
     );
     res.json(imagesRes.data);
   } catch (error) {
