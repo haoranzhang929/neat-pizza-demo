@@ -4,6 +4,6 @@ import App from "./";
 
 test("renders correct header", () => {
   render(<App />);
-  const header = screen.getByText("Full Stack App Template");
+  const header = screen.getByText("Neat Pizza Header");
   expect(header).toBeInTheDocument();
 });

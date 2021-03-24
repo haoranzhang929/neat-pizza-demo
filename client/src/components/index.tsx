@@ -21,7 +21,7 @@ function App() {
   return (
     <Container component="main" maxWidth="sm">
       <div className={container}>
-        <header>Full Stack App Template</header>
+        <header>Neat Pizza Header</header>
         <Router>
           <Switch>
             {routes.map((route, i) => (
