@@ -14,14 +14,6 @@ const appEnv = config.get<AppEnv>(Config.AppEnv);
 const app = express();
 const upload = multer();
 
-if (appEnv === AppEnv.Prod) {
-  // server react app using express.js in production
-  app.use(express.static(path.join(__dirname, REACT_APP_DIR)));
-  app.get("/*", function (__req, res) {
-    res.sendFile(path.join(`${__dirname}/`, REACT_APP_DIR, REACT_ENTRY_FILE));
-  });
-}
-
 app.post("/api/image", upload.single("image"), async (req, res) => {
   const imageFile = req.file;
   console.log(imageFile);
@@ -41,6 +33,14 @@ app.get("/api/images", async (req, res) => {
     res.status(500).send({ errorMessage: "Error retrieving images" });
   }
 });
+
+if (appEnv === AppEnv.Prod) {
+  // server react app using express.js in production
+  app.use(express.static(path.join(__dirname, REACT_APP_DIR)));
+  app.get("/*", function (__req, res) {
+    res.sendFile(path.join(`${__dirname}/`, REACT_APP_DIR, REACT_ENTRY_FILE));
+  });
+}
 
 app.listen(port, () => {
   console.log(`Server is running on http://${host}:${port}`);
