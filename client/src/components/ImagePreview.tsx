@@ -10,11 +10,11 @@ interface ImagePreviewProps {
 }
 
 const ImagePreview = ({ imageToUpload }: ImagePreviewProps) => {
-  const { gridList } = useStyles();
+  const { gridList, gridItem } = useStyles();
 
   return (
     <GridList cellHeight={380} cols={2} className={gridList}>
-      <GridListTile cols={2}>
+      <GridListTile cols={2} classes={{ tile: gridItem }}>
         <img src={URL.createObjectURL(imageToUpload)} alt={imageToUpload.name} />
       </GridListTile>
     </GridList>

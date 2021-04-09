@@ -108,7 +108,7 @@ const ImageUploader = () => {
           message={Message.Success}
         />
       )}
-      <ImageUpload handleSelectImage={handleSelectImage} success={success} />
+      {!success && <ImageUpload handleSelectImage={handleSelectImage} success={success} />}
       {imageToUpload && <ImagePreview imageToUpload={imageToUpload} />}
       <TextField
         className={userInput}
@@ -128,6 +128,7 @@ const ImageUploader = () => {
         disabled={isUploading || success}
         type="tel"
         required
+        margin="dense"
       />
       <div className={wrapper}>
         <Button

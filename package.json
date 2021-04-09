@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node ./dist/index",
     "start:prod": "NODE_ENV=production pm2 start ./dist/index.js",
+    "kill:prod": "pm2 stop 0 && pm2 del 0",
     "dev": "npm run typecheck && concurrently \"npm run server\" \"npm run client\"",
     "test": "npm run test --prefix client",
     "test:watch": "npm run test:watch --prefix client",

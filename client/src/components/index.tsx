@@ -17,12 +17,12 @@ const routes = [
 ];
 
 function App() {
-  const { container } = useStyles();
+  const { container, header } = useStyles();
 
   return (
     <Container component="main" maxWidth="sm">
       <div className={container}>
-        <header>Neat Pizza Header</header>
+        <header className={header}>Neat Pizza Header</header>
         <Router>
           <Switch>
             {routes.map((route, i) => (
