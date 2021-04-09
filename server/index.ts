@@ -63,8 +63,8 @@ app.get("/api/images", async (req, res) => {
 if (appEnv === AppEnv.Prod) {
   // server react app using express.js in production
   app.use(express.static(path.join(__dirname, REACT_APP_DIR)));
-  app.get("/*", function (__req, res) {
-    res.sendFile(path.join(`${__dirname}/`, REACT_APP_DIR, REACT_ENTRY_FILE));
+  app.get("/*", (__req, res) => {
+    res.sendFile(path.join(__dirname, REACT_APP_DIR, REACT_ENTRY_FILE));
   });
 }
 
