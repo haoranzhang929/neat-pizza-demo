@@ -120,7 +120,7 @@ const ImageUploader = () => {
         >
           {message ? ButtonText.Error : success ? ButtonText.Success : ButtonText.Upload}
         </Button>
-
+        {/* 
         {success && (
           <Button
             color="primary"
@@ -133,7 +133,7 @@ const ImageUploader = () => {
           >
             {ButtonText.Retry}
           </Button>
-        )}
+        )} */}
         {isUploading && <CircularProgress size={24} className={buttonProgress} />}
       </div>
     </>
