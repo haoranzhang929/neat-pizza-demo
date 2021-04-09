@@ -24,14 +24,21 @@ const mockCheck = (orderId: number) => {
 
 app.post("/api/image", upload.single("image"), async (req, res) => {
   const { store, orderId } = req.query as { store: string; orderId: string };
+  const phoneNumber = req.body.phone;
+  console.log("phoneNumber", phoneNumber);
+
+  if (!phoneNumber || isNaN(Number(phoneNumber))) {
+    res.status(400).send({ errorMessage: "Phone number is not valid" });
+    return;
+  }
 
   if (!store || !storeList.includes(Number(store))) {
-    res.status(404).send({ errorMessage: "Store not valid" });
+    res.status(400).send({ errorMessage: "Store not valid" });
     return;
   }
 
   if (!orderId) {
-    res.status(404).send({ errorMessage: "Order ID not valid" });
+    res.status(400).send({ errorMessage: "Order ID not valid" });
     return;
   }
 
@@ -39,7 +46,7 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
     mockCheck(Number(orderId));
 
     const imageFile = req.file;
-    console.log(imageFile);
+    console.log("imageFile", imageFile);
     await new Promise(r => setTimeout(r, 1000));
     res.send("ok");
   } catch (error) {
