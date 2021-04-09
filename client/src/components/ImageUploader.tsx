@@ -14,11 +14,16 @@ import ImageUpload from "./ImageUpload";
 import Alert from "./Alert";
 
 import { useStyles } from "./ImageUploader.style";
+import { useParams } from "react-router-dom";
 import { Severity, Message, ButtonText } from "../common/enum";
 import { DELAY } from "../common/constant";
 
 const ImageUploader = () => {
   const { wrapper, buttonSuccess, buttonProgress, retryButton } = useStyles();
+  const { store, orderId } = useParams<{
+    store: string | undefined;
+    orderId: string | undefined;
+  }>();
 
   const [imageToUpload, setImageToUpload] = useState<File>();
   const [isUploading, setIsUploading] = useState(false);
@@ -41,27 +46,40 @@ const ImageUploader = () => {
   };
 
   const handleUpload = () => {
-    if (imageToUpload) {
-      console.log("Upload Image");
-      setIsUploading(true);
-      setSuccess(false);
-      const data = new FormData();
-      data.append("image", imageToUpload);
-      axios
-        .post("/api/image", data, { headers: { "Content-type": "multipart/form-data" } })
-        .then(data => {
-          if (data.status === 200) {
-            setIsUploading(false);
-            setSuccess(true);
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          setMessage(Message.UploadError);
-          setIsUploading(false);
-        });
+    if (!store || isNaN(Number(store))) {
+      setMessage(Message.StoreNotValid);
+    } else if (!orderId || isNaN(Number(orderId))) {
+      setMessage(Message.OrderIdNotValid);
     } else {
-      setMessage(Message.NoImage);
+      if (imageToUpload) {
+        console.log("Upload Image");
+        setIsUploading(true);
+        setSuccess(false);
+        const data = new FormData();
+        data.append("image", imageToUpload);
+        axios
+          .post(`/api/image?store=${store}&orderId=${orderId}`, data, {
+            headers: { "Content-type": "multipart/form-data" }
+          })
+          .then(data => {
+            if (data.status === 200) {
+              setIsUploading(false);
+              setSuccess(true);
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            if (err.response.data.errorMessage === "Order ID Expired") {
+              setMessage(Message.OrderIdExpired);
+              setIsUploading(false);
+            } else {
+              setMessage(Message.UploadError);
+              setIsUploading(false);
+            }
+          });
+      } else {
+        setMessage(Message.NoImage);
+      }
     }
   };
 

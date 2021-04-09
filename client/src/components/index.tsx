@@ -12,6 +12,7 @@ import { Routes } from "../common/enum";
 
 const routes = [
   { path: Routes.Home, component: ImageUploader, exact: true },
+  { path: `/${Routes.Store}/:store/${Routes.OrderID}/:orderId`, component: ImageUploader },
   { path: Routes.ViewUploads, component: ImagesViewer, exact: true }
 ];
 

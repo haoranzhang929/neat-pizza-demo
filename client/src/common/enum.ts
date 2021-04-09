@@ -1,6 +1,8 @@
 export enum Routes {
   Home = "/",
-  ViewUploads = "/view-uploads"
+  ViewUploads = "/view-uploads",
+  Store = "store",
+  OrderID = "orderId"
 }
 
 export enum Severity {
@@ -9,9 +11,12 @@ export enum Severity {
 }
 
 export enum Message {
-  Success = "Photo uploaded",
-  UploadError = "Error uploading photo, please try again",
-  NoImage = "Please select a photo"
+  Success = "Your image upload has been successful, thank you",
+  UploadError = "Your image upload process has not been successful, please retry",
+  NoImage = "Please select a photo",
+  StoreNotValid = "Store is not valid",
+  OrderIdNotValid = "Order ID is not valid",
+  OrderIdExpired = "Apologies, unfortunately you had exceeded the preset time limit of 3 minutes within order completion for image uploading. Customised image printing will not be available for your current order, please try again on your next available order. Thank you"
 }
 
 export enum ButtonText {

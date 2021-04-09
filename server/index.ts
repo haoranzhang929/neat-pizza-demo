@@ -14,11 +14,37 @@ const appEnv = config.get<AppEnv>(Config.AppEnv);
 const app = express();
 const upload = multer();
 
+const storeList = [1, 2];
+
+const mockCheck = (orderId: number) => {
+  if (orderId === 111) {
+    throw new Error("OrderId Expire");
+  }
+};
+
 app.post("/api/image", upload.single("image"), async (req, res) => {
-  const imageFile = req.file;
-  console.log(imageFile);
-  await new Promise(r => setTimeout(r, 1000));
-  res.send("ok");
+  const { store, orderId } = req.query as { store: string; orderId: string };
+
+  if (!store || !storeList.includes(Number(store))) {
+    res.status(404).send({ errorMessage: "Store not valid" });
+    return;
+  }
+
+  if (!orderId) {
+    res.status(404).send({ errorMessage: "Order ID not valid" });
+    return;
+  }
+
+  try {
+    mockCheck(Number(orderId));
+
+    const imageFile = req.file;
+    console.log(imageFile);
+    await new Promise(r => setTimeout(r, 1000));
+    res.send("ok");
+  } catch (error) {
+    res.status(500).send({ errorMessage: "Order ID Expired" });
+  }
 });
 
 app.get("/api/images", async (req, res) => {
