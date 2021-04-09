@@ -1,1 +1,1 @@
-export const DELAY = 3000; // delay time for showing alert message: 3 secnds
+export const DELAY = 20000; // delay time for showing alert message: 10 secnds
