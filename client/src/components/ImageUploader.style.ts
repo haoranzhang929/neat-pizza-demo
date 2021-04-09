@@ -2,6 +2,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { green } from "@material-ui/core/colors";
 
 export const useStyles = makeStyles(({ spacing }) => ({
+  userInput: {
+    marginTop: spacing(2),
+    marginBottom: spacing(2)
+  },
   wrapper: {
     marginBottom: spacing(2),
     position: "relative"
