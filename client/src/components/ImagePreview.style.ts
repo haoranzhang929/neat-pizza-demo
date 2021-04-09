@@ -5,5 +5,8 @@ export const useStyles = makeStyles(({ spacing }) => ({
     width: 400,
     height: 400,
     marginBottom: spacing(2)
+  },
+  gridItem: {
+    borderRadius: "25px"
   }
 }));

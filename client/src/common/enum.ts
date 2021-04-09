@@ -2,7 +2,8 @@ export enum Routes {
   Home = "/",
   ViewUploads = "/view-uploads",
   Store = "store",
-  OrderID = "orderId"
+  OrderID = "orderId",
+  NoMatch = "*"
 }
 
 export enum Severity {
@@ -23,5 +24,6 @@ export enum ButtonText {
   Error = "Error",
   Success = "Success",
   Upload = "Upload",
-  Retry = "Retry"
+  Retry = "Retry",
+  Rerfresh = "Refresh"
 }
