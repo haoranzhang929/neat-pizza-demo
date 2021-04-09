@@ -16,7 +16,7 @@ import Alert from "./Alert";
 import { useStyles } from "./ImageUploader.style";
 import { useParams } from "react-router-dom";
 import { Severity, Message, ButtonText } from "../common/enum";
-import { DELAY } from "../common/constant";
+import { DELAY, STORE_LIST } from "../common/constant";
 
 const ImageUploader = () => {
   const { wrapper, buttonSuccess, buttonProgress, retryButton } = useStyles();
@@ -46,7 +46,8 @@ const ImageUploader = () => {
   };
 
   const handleUpload = () => {
-    if (!store || isNaN(Number(store))) {
+    const storeNumber = Number(store);
+    if (!store || isNaN(storeNumber) || !STORE_LIST.includes(storeNumber)) {
       setMessage(Message.StoreNotValid);
     } else if (!orderId || isNaN(Number(orderId))) {
       setMessage(Message.OrderIdNotValid);
