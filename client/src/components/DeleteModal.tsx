@@ -61,13 +61,13 @@ const DeleteModal = ({
   const { paper, buttonGroup, buttonProgress } = useStyles();
   const [isDeleting, setIsDeleting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleDeletion = () => {
     setIsDeleting(true);
     deleteImage(store, orderId)
-      .then(res => {
-        console.log(res);
-        setIsDeleting(true);
+      .then(() => {
+        setIsDeleting(false);
         setSuccess(true);
         onDeleteSuccess();
       })
@@ -75,19 +75,29 @@ const DeleteModal = ({
         console.error(err);
         setIsDeleting(false);
         setSuccess(false);
+        setError("Something went wrong, please try again!");
       });
+  };
+
+  const handleModalClose = () => {
+    handleModalStatus(false);
+    setSuccess(false);
+    setIsDeleting(false);
+    setError("");
   };
 
   return (
     <Modal
       open={modalOpen}
-      onClose={() => handleModalStatus(false)}
+      onClose={handleModalClose}
       aria-labelledby="delete-image-modal"
       aria-describedby="delete-image-modal"
     >
       <div className={paper}>
         <Typography variant="h6">
-          {success
+          {error
+            ? error
+            : success
             ? "Images is successfully deleted!"
             : `Please download image first, then click confirm to delete image for Order ID: ${orderId}`}
         </Typography>
@@ -101,12 +111,8 @@ const DeleteModal = ({
             Confirm
           </Button>
           {isDeleting && <CircularProgress size={24} className={buttonProgress} />}
-          <Button
-            variant="text"
-            style={{ paddingLeft: "20px" }}
-            onClick={() => handleModalStatus(false)}
-          >
-            Cancel
+          <Button variant="text" style={{ paddingLeft: "20px" }} onClick={handleModalClose}>
+            {success ? "Go Back" : "Cancel"}
           </Button>
         </div>
       </div>
