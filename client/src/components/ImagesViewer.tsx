@@ -72,7 +72,7 @@ const ImagesViewer = () => {
       setImages(res.data);
       setIsLoading(false);
     }
-  }, 10000); // refresh every 30 seconds
+  }, 30000); // refresh every 30 seconds
 
   return (
     <div>
