@@ -63,6 +63,7 @@ app.get("/api/images", async (req, res) => {
     const imagesRes = await axios.get<{ id: string; url: string; download_url: string }[]>(
       "https://picsum.photos/v2/list?limit=10"
     );
+    await new Promise(r => setTimeout(r, 2000));
     res.json(imagesRes.data);
   } catch (error) {
     console.error(error);
@@ -76,7 +77,7 @@ app.delete("/api/images", async (req, res) => {
 
   try {
     // hit image delete endpoint
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 2000));
     res.send("ok");
   } catch (error) {
     console.error(error);
