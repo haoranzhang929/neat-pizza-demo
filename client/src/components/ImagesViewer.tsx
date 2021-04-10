@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Button from "@material-ui/core/Button";
-import ReplayIcon from "@material-ui/icons/Replay";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import ImageList from "./ImageList";
+import ImagesViewerActions from "./ImagesViewerActions";
+import DeleteModal from "./DeleteModal";
 
-import { Image } from "../common/model";
-import { ButtonText } from "../common/enum";
+import { Image, ItemToDelete } from "../common/model";
 
 const fetchImages = async (store: number) => await axios.get<Image[]>(`/api/images?store=${store}`);
 
@@ -19,8 +14,19 @@ const ImagesViewer = () => {
   const [images, setImages] = useState<Image[]>();
   const [selectedStore, setSelectedStore] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<ItemToDelete>();
 
-  useEffect(() => {
+  const handleModalStatus = (isOpen: boolean) => {
+    setModalOpen(isOpen);
+  };
+
+  const handleDelete = (item: ItemToDelete) => {
+    handleModalStatus(true);
+    setItemToDelete(item);
+  };
+
+  const geImages = () => {
     if (selectedStore !== 0) {
       setIsLoading(true);
       fetchImages(selectedStore).then(res => {
@@ -30,47 +36,35 @@ const ImagesViewer = () => {
     } else {
       setImages(undefined);
     }
+  };
+
+  useEffect(() => {
+    geImages();
   }, [selectedStore]);
+
   return (
     <>
-      <FormControl
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          marginBottom: "20px"
+      <ImagesViewerActions
+        selectedStore={selectedStore}
+        isLoading={isLoading}
+        handleRefresh={store => {
+          setIsLoading(true);
+          fetchImages(store).then(res => {
+            setImages(res.data);
+            setIsLoading(false);
+          });
         }}
-      >
-        <InputLabel id="store-select-label">Store</InputLabel>
-        <Select
-          labelId="store-select-label"
-          id="store-select"
-          value={selectedStore}
-          onChange={e => setSelectedStore(Number(e.target.value))}
-        >
-          <MenuItem value={0}>Select a Store</MenuItem>
-          <MenuItem value={1}>Store 1</MenuItem>
-          <MenuItem value={2}>Store 2</MenuItem>
-        </Select>
-        <Button
-          color="primary"
-          startIcon={<ReplayIcon />}
-          onClick={() => {
-            if (selectedStore !== 0) {
-              setIsLoading(true);
-              fetchImages(selectedStore).then(res => {
-                setImages(res.data);
-                setIsLoading(false);
-              });
-            }
-          }}
-          disabled={isLoading || selectedStore === 0}
-          style={{ marginLeft: "20px", marginTop: "16px" }}
-        >
-          {ButtonText.Rerfresh}
-        </Button>
-      </FormControl>
-      {images && <ImageList images={images} />}
+        handleSelectStore={store => setSelectedStore(store)}
+      />
+      {images && <ImageList images={images} handleDelete={handleDelete} />}
+      {itemToDelete && (
+        <DeleteModal
+          modalOpen={modalOpen}
+          handleModalStatus={handleModalStatus}
+          itemToDelete={itemToDelete}
+          onDeleteSuccess={geImages}
+        />
+      )}
       {isLoading && (
         <div
           style={{

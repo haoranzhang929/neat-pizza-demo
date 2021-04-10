@@ -7,13 +7,14 @@ import IconButton from "@material-ui/core/IconButton";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 import { useStyles } from "./ImageList.style";
-import { Image } from "../common/model";
+import { Image, ItemToDelete } from "../common/model";
 
 interface ImageListProps {
   images: Image[];
+  handleDelete: (itemToDelete: ItemToDelete) => void;
 }
 
-const ImageList = ({ images }: ImageListProps) => {
+const ImageList = ({ images, handleDelete }: ImageListProps) => {
   const { gridList, icon } = useStyles();
 
   const [downloading, setDownloading] = useState(false);
@@ -33,6 +34,7 @@ const ImageList = ({ images }: ImageListProps) => {
         element.download = `${orderNumber}-Store${store}.${extension}`;
         element.click();
         setDownloading(false);
+        handleDelete({ orderId: orderNumber, store: Number(store) });
       })
       .catch(err => {
         console.error(err);

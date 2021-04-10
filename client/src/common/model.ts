@@ -4,3 +4,8 @@ export interface Image {
   url: string;
   download_url: string;
 }
+
+export interface ItemToDelete {
+  orderId: number;
+  store: number;
+}
