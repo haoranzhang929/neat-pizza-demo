@@ -43,13 +43,18 @@ const ImageList = ({ images, handleDelete }: ImageListProps) => {
   };
   return (
     <div>
-      <GridList cellHeight={180} className={gridList}>
+      <GridList cellHeight={200} className={gridList}>
         {images.map(({ id, author, download_url }) => (
           <GridListTile key={`image-${id}`}>
             <img src={download_url} alt={`image by ${author}`} />
             <GridListTileBar
-              title={`#Order Number`}
-              subtitle={<span>Store: #Store Number</span>}
+              title={`Order Number: #Number`}
+              subtitle={
+                <div>
+                  <div>Customer Name: #Name</div>
+                  <div style={{ marginTop: "5px" }}>Store: #Store Number</div>
+                </div>
+              }
               actionIcon={
                 <IconButton
                   aria-label={`info about ${id}`}
