@@ -55,6 +55,9 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
 });
 
 app.get("/api/images", async (req, res) => {
+  const { store } = req.query as { store: string };
+  console.log(`Get Image for store ${store}`);
+
   try {
     // mock images
     const imagesRes = await axios.get<{ id: string; url: string; download_url: string }[]>(
@@ -64,6 +67,20 @@ app.get("/api/images", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ errorMessage: "Error retrieving images" });
+  }
+});
+
+app.delete("/api/images", async (req, res) => {
+  const { store, orderId } = req.query as { store: string; orderId: string };
+  console.log(`Delete Image for order ID: ${orderId} & store ${store}`);
+
+  try {
+    // hit image delete endpoint
+    await new Promise(r => setTimeout(r, 1000));
+    res.send("ok");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ errorMessage: "Error deleting images" });
   }
 });
 
