@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { useEffect, useRef } from "react";
 
 export const useInterval = (callback: () => void, delay: number) => {
