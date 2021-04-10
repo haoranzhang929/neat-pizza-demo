@@ -6,6 +6,11 @@ export const useStyles = makeStyles(({ spacing }) => ({
     height: 400,
     marginBottom: spacing(2)
   },
+  gridListSmall: {
+    width: 350,
+    height: 350,
+    marginBottom: spacing(2)
+  },
   gridItem: {
     borderRadius: "25px"
   }

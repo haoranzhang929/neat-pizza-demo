@@ -5,6 +5,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
+import Typography from "@material-ui/core/Typography";
 
 import { ButtonText } from "../common/enum";
 
@@ -24,7 +25,7 @@ const ImagesViewerActions = (props: ImagesViewerActionsProps) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
-          marginBottom: "20px"
+          marginBottom: "10px"
         }}
       >
         <InputLabel id="store-select-label">Store</InputLabel>
@@ -52,6 +53,9 @@ const ImagesViewerActions = (props: ImagesViewerActionsProps) => {
           {ButtonText.Rerfresh}
         </Button>
       </FormControl>
+      <Typography variant="caption" style={{ marginBottom: "10px" }}>
+        *app will auto refresh every 30 seconds
+      </Typography>
     </>
   );
 };
