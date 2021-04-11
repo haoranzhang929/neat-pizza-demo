@@ -17,12 +17,7 @@ const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
 const validate = (orderID: string, phoneNumber: string, storeID: string) =>
-  axios.post(`${baseUrl}/validate`, {
-    headers: {
-      "Content-Type": "application/json"
-    },
-    data: { orderID, phoneNumber, storeID }
-  });
+  axios.post(`${baseUrl}/images/validate`, JSON.stringify({ orderID, phoneNumber, storeID }));
 
 app.post("/api/image", upload.single("image"), async (req, res) => {
   const { store, orderId } = req.query as { store: string; orderId: string };
@@ -43,14 +38,12 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
     return;
   }
 
-  // try {
-  //   const t = await validate(orderId, phoneNumber, store);
-  //   console.log(t);
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(500).send({ errorMessage: "Order ID Expired" });
-  //   return;
-  // }
+  try {
+    await validate(orderId, phoneNumber, store);
+  } catch (error) {
+    res.status(500).send({ errorMessage: "Validate Error" });
+    return;
+  }
 
   try {
     const { buffer, originalname, mimetype, size } = req.file;
@@ -83,7 +76,6 @@ app.get("/api/images", async (req, res) => {
     >(`${baseUrl}/images/stores/${store}`);
     res.json(imagesRes.data);
   } catch (error) {
-    console.error(error);
     res.status(500).send({ errorMessage: "Error retrieving images" });
   }
 });
@@ -100,7 +92,6 @@ app.delete("/api/images", async (req, res) => {
     });
     res.send("ok");
   } catch (error) {
-    console.error(error);
     res.status(500).send({ errorMessage: "Error deleting images" });
   }
 });

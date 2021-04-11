@@ -68,7 +68,7 @@ const ImageUploader = () => {
 
   const handleUpload = () => {
     const storeNumber = Number(store);
-    if (!store || isNaN(storeNumber) || !STORE_LIST.includes(storeNumber)) {
+    if (!store || isNaN(storeNumber)) {
       setMessage(Message.StoreNotValid);
     } else if (!orderId || isNaN(Number(orderId))) {
       setMessage(Message.OrderIdNotValid);
@@ -94,6 +94,9 @@ const ImageUploader = () => {
             console.error(err);
             if (err.response.data.errorMessage === "Order ID Expired") {
               setMessage(Message.OrderIdExpired);
+              setIsUploading(false);
+            } else if (err.response.data.errorMessage === "Validate Error") {
+              setMessage(Message.ValidateError);
               setIsUploading(false);
             } else {
               setMessage(Message.UploadError);
@@ -162,7 +165,7 @@ const ImageUploader = () => {
             />
             <Typography variant="body2" className={note}>
               *Please enter you matching phone number as per your recent order placed with Neat
-              pizza
+              Pizza
             </Typography>
             <div className={wrapper}>
               <Button
