@@ -3,5 +3,8 @@
   "server": {
     "host": "127.0.0.1",
     "port": "80"
+  },
+  "service": {
+    "baseUrl": "http://127.0.0.1:8080"
   }
 }

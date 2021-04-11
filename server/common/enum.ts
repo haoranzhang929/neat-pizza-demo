@@ -1,6 +1,7 @@
 export enum Config {
   Server = "server",
-  AppEnv = "appEnv"
+  AppEnv = "appEnv",
+  Service = "service"
 }
 
 export enum AppEnv {
