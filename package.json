@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/index",
+    "start": "rm -rf dist/ && npm run build && npm run start:prod",
+    "start:server": "node ./dist/index",
     "start:prod": "NODE_ENV=production pm2 start ./dist/index.js",
     "kill:prod": "pm2 stop 0 && pm2 del 0",
     "dev": "npm run typecheck && concurrently \"npm run server\" \"npm run client\"",
@@ -17,7 +18,8 @@
     "build:server": "tsc --project ./",
     "typecheck": "echo 'Type Checking...' && tsc --noEmit && echo 'Type Checking Completed'",
     "lint:server": "echo 'Server Code Lint Checking...' && eslint --ext .js,.jsx,.ts,.tsx server && echo 'Lint Checking Completed'",
-    "iall": "npm i && cd client && npm i && cd .."
+    "iall": "npm i && cd client && npm i && cd ..",
+    "pm2:logs": "pm2 logs"
   },
   "eslintConfig": {
     "extends": "react-app"
