@@ -18,7 +18,8 @@ export enum Message {
   StoreNotValid = "Store is not valid",
   OrderIdNotValid = "Order ID is not valid",
   OrderIdExpired = "Apologies, unfortunately you had exceeded the preset time limit of 3 minutes within order completion for image uploading. Customised image printing will not be available for your current order, please try again on your next available order. Thank you",
-  ValidateError = "Something went wrong, please check if the phone number is correct"
+  ValidateError = "Something went wrong, please check if the phone number is correct",
+  TooLate = "It's a bit too late, your pizza is on the way"
 }
 
 export enum ButtonText {
