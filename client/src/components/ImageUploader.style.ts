@@ -22,9 +22,7 @@ export const useStyles = makeStyles(({ spacing }) => ({
   note2: {
     width: "90%",
     minWidth: "300px",
-    marginLeft: spacing(2),
-    marginRight: spacing(2),
-    marginBottom: spacing(2),
+    margin: spacing("auto", 2, 2, 2),
     color: "rgba(0, 0, 0, 0.65)"
   },
   wrapper: {
