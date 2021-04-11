@@ -8,7 +8,7 @@ import PageNotFound from "./PageNotFound";
 import { Routes } from "../common/enum";
 
 const routes = [
-  { path: `/${Routes.Store}/:store/${Routes.OrderID}/:orderId`, component: ImageUploader },
+  { path: `/${Routes.Store}/:store/:orderId`, component: ImageUploader },
   { path: Routes.ViewUploads, component: ImagesViewer, exact: true },
   { path: Routes.NoMatch, component: PageNotFound }
 ];
