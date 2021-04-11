@@ -68,8 +68,7 @@ const DeleteModal = ({
         setSuccess(true);
         onDeleteSuccess();
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
         setIsDeleting(false);
         setSuccess(false);
         setError("Something went wrong, please try again!");

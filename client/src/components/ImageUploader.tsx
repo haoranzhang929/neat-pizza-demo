@@ -63,7 +63,6 @@ const ImageUploader = () => {
       setMessage(Message.OrderIdNotValid);
     } else {
       if (imageToUpload) {
-        console.log("Upload Image");
         setIsUploading(true);
         setSuccess(false);
         const data = new FormData();

@@ -45,8 +45,7 @@ const ImagesViewer = () => {
           setImages(res.data);
           setIsLoading(false);
         })
-        .catch(error => {
-          console.error(error);
+        .catch(() => {
           setImages(undefined);
           setIsLoading(false);
         });
@@ -66,8 +65,7 @@ const ImagesViewer = () => {
         setStoreList(res.data);
         setIsLoading(false);
       })
-      .catch(error => {
-        console.error(error);
+      .catch(() => {
         setStoreList(undefined);
         setIsLoading(false);
       });

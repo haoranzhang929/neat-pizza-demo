@@ -4,6 +4,9 @@ import path from "path";
 import config from "config";
 import axios from "axios";
 import FormData from "form-data";
+import http from "http";
+// import https from "https";
+// import fs from "fs";
 
 import { ServerConfig, ServiceConfig } from "./common/model";
 import { Config, AppEnv } from "./common/enum";
@@ -30,8 +33,8 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
     return;
   }
 
-  if (!store || isNaN(Number(store))) {
-    res.status(400).send({ errorMessage: "Store not valid" });
+  if (!store || isNaN(Number(store)) || !stores.map(s => s.storeID).includes(Number(store))) {
+    res.status(400).send({ errorMessage: "Validate Error" });
     return;
   }
 
@@ -122,12 +125,30 @@ app.delete("/api/images", async (req, res) => {
 
 if (appEnv === AppEnv.Prod) {
   // server react app using express.js in production
-  app.use(express.static(path.join(__dirname, REACT_APP_DIR)));
+  app.use(express.static(path.join(__dirname, REACT_APP_DIR), { dotfiles: "allow" }));
   app.get("/*", (__req, res) => {
     res.sendFile(path.join(__dirname, REACT_APP_DIR, REACT_ENTRY_FILE));
   });
 }
 
-app.listen(port, () => {
+const httpServer = http.createServer(app);
+
+httpServer.listen(port, () => {
   console.log(`Server is running on http://${host}:${port}`);
 });
+
+// if (appEnv === AppEnv.Prod) {
+//   // Certificate
+//   const privateKey = fs.readFileSync("/etc/letsencrypt/live/yourdomain.com/privkey.pem", "utf8");
+//   const certificate = fs.readFileSync("/etc/letsencrypt/live/yourdomain.com/cert.pem", "utf8");
+//   const ca = fs.readFileSync("/etc/letsencrypt/live/yourdomain.com/chain.pem", "utf8");
+//   const credentials = {
+//     key: privateKey,
+//     cert: certificate,
+//     ca: ca
+//   };
+//   const httpsServer = https.createServer(credentials, app);
+//   httpsServer.listen(443, () => {
+//     console.log("HTTPS Server running on port 443");
+//   });
+// }
