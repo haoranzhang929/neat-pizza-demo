@@ -108,7 +108,9 @@ const ImagesViewer = () => {
             }}
             handleSelectStore={store => setSelectedStore(store)}
           />
-          {images && <ImageList images={images} handleDelete={handleDelete} />}
+          {images && (
+            <ImageList storeList={storeList} images={images} handleDelete={handleDelete} />
+          )}
           {itemToDelete && (
             <DeleteModal
               modalOpen={modalOpen}
