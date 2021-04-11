@@ -30,7 +30,13 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
     return;
   }
 
-  if (!store || isNaN(Number(store))) {
+  if (stores.length <= 0) {
+    const storesRes = await axios.get<{ StoreId: number; Name: string }[]>(`${baseUrl}/stores`);
+    stores = storesRes.data.map(({ StoreId, Name }) => ({ storeID: StoreId, name: Name }));
+  }
+  const storeList = stores.map(({ storeID }) => storeID);
+
+  if (!store || isNaN(Number(store)) || !storeList.includes(Number(store))) {
     res.status(400).send({ errorMessage: "Store not valid" });
     return;
   }
@@ -122,7 +128,7 @@ app.delete("/api/images", async (req, res) => {
 
 if (appEnv === AppEnv.Prod) {
   // server react app using express.js in production
-  app.use(express.static(path.join(__dirname, REACT_APP_DIR)));
+  app.use(express.static(path.join(__dirname, REACT_APP_DIR), { dotfiles: "allow" }));
   app.get("/*", (__req, res) => {
     res.sendFile(path.join(__dirname, REACT_APP_DIR, REACT_ENTRY_FILE));
   });
