@@ -22,9 +22,10 @@ const useStyles = makeStyles(({ spacing }) => ({
     justifyContent: "center",
     background: "rgba(255,255,255, 0.8)",
     borderRadius: "25px",
-    margin: spacing(2)
+    margin: spacing(2),
+    color: "rgba(0, 0, 0, 0.7)"
   },
-  button: { width: "100px", alignSelf: "center", margin: spacing(2) }
+  button: { width: "100px", alignSelf: "center", margin: spacing(2), color: "rgba(0, 0, 0, 0.7)" }
 }));
 
 const PageNotFound = () => {
@@ -46,7 +47,7 @@ const PageNotFound = () => {
             <Typography variant="h1" align="center">
               404
             </Typography>
-            <Typography variant="h3" align="center">
+            <Typography variant="h4" align="center" style={{ padding: "20px" }}>
               O-o-oh! Something broke.
             </Typography>
             <Button
