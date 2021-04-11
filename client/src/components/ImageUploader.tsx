@@ -1,6 +1,6 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
+import { useParams } from "react-router-dom";
 import clsx from "clsx";
-import axios from "axios";
 
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
@@ -8,7 +8,6 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CheckIcon from "@material-ui/icons/Check";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
-import ReplayIcon from "@material-ui/icons/Replay";
 import CloseIcon from "@material-ui/icons/Close";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -21,22 +20,13 @@ import Footer from "./Footer";
 
 import { useStyles } from "./ImageUploader.style";
 import { useStyles as useStyleRoot } from "./index.style";
-import { useParams } from "react-router-dom";
 import { Severity, Message, ButtonText } from "../common/enum";
-import { DELAY, STORE_LIST } from "../common/constant";
+import { DELAY } from "../common/constant";
 import Logo from "../assets/Logo.png";
+import { fetchStoreList, upload } from "../service/fetch";
 
 const ImageUploader = () => {
-  const {
-    mainApp,
-    note,
-    note2,
-    wrapper,
-    buttonSuccess,
-    buttonProgress,
-    retryButton,
-    userInput
-  } = useStyles();
+  const { mainApp, note, note2, wrapper, buttonSuccess, buttonProgress, userInput } = useStyles();
   const { root, container, header, logo, logoSmall } = useStyleRoot();
   const { store, orderId } = useParams<{
     store: string | undefined;
@@ -66,9 +56,11 @@ const ImageUploader = () => {
     setImageToUpload(image);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     const storeNumber = Number(store);
-    if (!store || isNaN(storeNumber)) {
+    const res = await fetchStoreList();
+    const storeList = res.data.map(d => d.storeID);
+    if (!store || isNaN(storeNumber) || !storeList.includes(storeNumber)) {
       setMessage(Message.StoreNotValid);
     } else if (!orderId || isNaN(Number(orderId))) {
       setMessage(Message.OrderIdNotValid);
@@ -80,10 +72,7 @@ const ImageUploader = () => {
         const data = new FormData();
         data.append("image", imageToUpload);
         phoneNumber && data.append("phone", phoneNumber);
-        axios
-          .post(`/api/image?store=${store}&orderId=${orderId}`, data, {
-            headers: { "Content-type": "multipart/form-data" }
-          })
+        upload(store, orderId, data)
           .then(data => {
             if (data.status === 200) {
               setIsUploading(false);
@@ -180,20 +169,6 @@ const ImageUploader = () => {
               >
                 {message ? ButtonText.Error : success ? ButtonText.Success : ButtonText.Upload}
               </Button>
-              {/* 
-        {success && (
-          <Button
-            color="primary"
-            className={retryButton}
-            startIcon={<ReplayIcon />}
-            onClick={() => {
-              setImageToUpload(undefined);
-              setSuccess(false);
-            }}
-          >
-            {ButtonText.Retry}
-          </Button>
-        )} */}
               {isUploading && <CircularProgress size={24} className={buttonProgress} />}
             </div>
             <Typography variant="body2" className={note2}>
