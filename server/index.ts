@@ -128,7 +128,7 @@ app.delete("/api/images", async (req, res) => {
 
 if (appEnv === AppEnv.Prod) {
   // server react app using express.js in production
-  app.use(express.static(path.join(__dirname, REACT_APP_DIR)));
+  app.use(express.static(path.join(__dirname, REACT_APP_DIR), { dotfiles: "allow" }));
   app.get("/*", (__req, res) => {
     res.sendFile(path.join(__dirname, REACT_APP_DIR, REACT_ENTRY_FILE));
   });
