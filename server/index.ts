@@ -43,8 +43,15 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
   try {
     await validate(orderId, phoneNumber, store);
   } catch (error) {
-    res.status(500).send({ errorMessage: "Validate Error" });
-    return;
+    const responseData = error.response?.data;
+    if (responseData) {
+      const { message } = responseData;
+      res.status(400).send({ errorMessage: message });
+      return;
+    } else {
+      res.status(400).send({ errorMessage: "Validate Error" });
+      return;
+    }
   }
 
   try {
