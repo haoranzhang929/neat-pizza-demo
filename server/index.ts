@@ -3,36 +3,37 @@ import multer from "multer";
 import path from "path";
 import config from "config";
 import axios from "axios";
+import FormData from "form-data";
 
-import { ServerConfig } from "./common/model";
+import { ServerConfig, ServiceConfig } from "./common/model";
 import { Config, AppEnv } from "./common/enum";
 import { REACT_APP_DIR, REACT_ENTRY_FILE } from "./common/constant";
 
 const { host, port } = config.get<ServerConfig>(Config.Server);
 const appEnv = config.get<AppEnv>(Config.AppEnv);
+const { baseUrl } = config.get<ServiceConfig>(Config.Service);
 
 const app = express();
-const upload = multer();
+const upload = multer({ storage: multer.memoryStorage() });
 
-const storeList = [1, 2];
-
-const mockCheck = (orderId: number) => {
-  if (orderId === 111) {
-    throw new Error("OrderId Expire");
-  }
-};
+const validate = (orderID: string, phoneNumber: string, storeID: string) =>
+  axios.post(`${baseUrl}/validate`, {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    data: { orderID, phoneNumber, storeID }
+  });
 
 app.post("/api/image", upload.single("image"), async (req, res) => {
   const { store, orderId } = req.query as { store: string; orderId: string };
   const phoneNumber = req.body.phone;
-  console.log("phoneNumber", phoneNumber);
 
   if (!phoneNumber || isNaN(Number(phoneNumber))) {
     res.status(400).send({ errorMessage: "Phone number is not valid" });
     return;
   }
 
-  if (!store || !storeList.includes(Number(store))) {
+  if (!store || isNaN(Number(store))) {
     res.status(400).send({ errorMessage: "Store not valid" });
     return;
   }
@@ -42,28 +43,44 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
     return;
   }
 
-  try {
-    mockCheck(Number(orderId));
+  // try {
+  //   const t = await validate(orderId, phoneNumber, store);
+  //   console.log(t);
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(500).send({ errorMessage: "Order ID Expired" });
+  //   return;
+  // }
 
-    const imageFile = req.file;
-    console.log("imageFile", imageFile);
-    await new Promise(r => setTimeout(r, 1000));
+  try {
+    const { buffer, originalname, mimetype, size } = req.file;
+    const bodyFormData = new FormData();
+    const formData = bodyFormData;
+    formData.append("file", buffer, {
+      filename: originalname,
+      contentType: mimetype,
+      knownLength: size
+    });
+    formData.append("storeID", store);
+    formData.append("orderID", orderId);
+
+    await axios.post(`${baseUrl}/images`, formData.getBuffer(), {
+      headers: { ...formData.getHeaders() },
+      data: bodyFormData
+    });
     res.send("ok");
   } catch (error) {
-    res.status(500).send({ errorMessage: "Order ID Expired" });
+    res.status(500).send({ errorMessage: "Error Uploading Image" });
   }
 });
 
 app.get("/api/images", async (req, res) => {
   const { store } = req.query as { store: string };
-  console.log(`Get Image for store ${store}`);
 
   try {
-    // mock images
-    const imagesRes = await axios.get<{ id: string; url: string; download_url: string }[]>(
-      "https://picsum.photos/v2/list?limit=10"
-    );
-    await new Promise(r => setTimeout(r, 2000));
+    const imagesRes = await axios.get<
+      { storeID: string; orderID: string; url: string; name: string }[]
+    >(`${baseUrl}/images/stores/${store}`);
     res.json(imagesRes.data);
   } catch (error) {
     console.error(error);
@@ -72,12 +89,15 @@ app.get("/api/images", async (req, res) => {
 });
 
 app.delete("/api/images", async (req, res) => {
-  const { store, orderId } = req.query as { store: string; orderId: string };
-  console.log(`Delete Image for order ID: ${orderId} & store ${store}`);
+  const { name } = req.query as { name: string };
 
   try {
-    // hit image delete endpoint
-    await new Promise(r => setTimeout(r, 2000));
+    await axios.delete(`${baseUrl}/images`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: { name }
+    });
     res.send("ok");
   } catch (error) {
     console.error(error);

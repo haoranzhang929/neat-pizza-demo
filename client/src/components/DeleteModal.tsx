@@ -7,8 +7,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { green } from "@material-ui/core/colors";
 
-import { ItemToDelete } from "../common/model";
-
 const useStyles = makeStyles(theme =>
   createStyles({
     paper: {
@@ -45,17 +43,16 @@ const useStyles = makeStyles(theme =>
 interface DeleteModalProps {
   modalOpen: boolean;
   handleModalStatus: (status: boolean) => void;
-  itemToDelete: ItemToDelete;
+  itemToDelete: string;
   onDeleteSuccess: () => void;
 }
 
-const deleteImage = async (store: number, orderId: number) =>
-  await axios.delete(`/api/images?store=${store}&orderId=${orderId}`);
+const deleteImage = async (name: string) => await axios.delete(`/api/images?name=${name}`);
 
 const DeleteModal = ({
   modalOpen,
   handleModalStatus,
-  itemToDelete: { orderId, store },
+  itemToDelete,
   onDeleteSuccess
 }: DeleteModalProps) => {
   const { paper, buttonGroup, buttonProgress } = useStyles();
@@ -65,7 +62,7 @@ const DeleteModal = ({
 
   const handleDeletion = () => {
     setIsDeleting(true);
-    deleteImage(store, orderId)
+    deleteImage(itemToDelete)
       .then(() => {
         setIsDeleting(false);
         setSuccess(true);
@@ -99,7 +96,7 @@ const DeleteModal = ({
             ? error
             : success
             ? "Images is successfully deleted!"
-            : `Please download image first, then click confirm to delete image for Order ID: ${orderId}`}
+            : `Please download image first, then click confirm to delete image: ${itemToDelete}`}
         </Typography>
         <div className={buttonGroup}>
           <Button
