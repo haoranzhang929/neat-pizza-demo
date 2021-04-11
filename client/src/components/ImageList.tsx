@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
@@ -7,11 +6,11 @@ import IconButton from "@material-ui/core/IconButton";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 import { useStyles } from "./ImageList.style";
-import { Image, ItemToDelete } from "../common/model";
+import { Image } from "../common/model";
 
 interface ImageListProps {
   images: Image[];
-  handleDelete: (itemToDelete: ItemToDelete) => void;
+  handleDelete: (name: string) => void;
 }
 
 const ImageList = ({ images, handleDelete }: ImageListProps) => {
@@ -19,53 +18,29 @@ const ImageList = ({ images, handleDelete }: ImageListProps) => {
 
   const [downloading, setDownloading] = useState(false);
 
-  const downloadFile = (url: string, orderNumber: number, store: string) => {
+  const downloadFile = (url: string, orderNumber: string, store: string, name: string) => {
     setDownloading(true);
-    axios
-      .get(url, { responseType: "blob" })
-      .then(res => {
-        const imageType = res.data.type;
-        const blob = new Blob([res.data], { type: imageType });
-        const extension = imageType.substr(imageType.lastIndexOf("/") + 1);
-        const link = URL.createObjectURL(blob);
-        const element = document.createElement("a");
-        element.href = link;
-        element.target = "_blank";
-        element.download = `${orderNumber}-Store${store}.${extension}`;
-        element.click();
-        setDownloading(false);
-        handleDelete({ orderId: orderNumber, store: Number(store) });
-      })
-      .catch(err => {
-        console.error(err);
-        setDownloading(false);
-      });
+    const element = document.createElement("a");
+    element.href = url;
+    element.download = name;
+    element.click();
+    setDownloading(false);
+    handleDelete(name);
   };
   return (
     <div>
       <GridList cellHeight={200} className={gridList}>
-        {images.map(({ id, author, download_url }) => (
-          <GridListTile key={`image-${id}`}>
-            <img src={download_url} alt={`image by ${author}`} />
+        {images.map(({ storeID, orderID, url, name }) => (
+          <GridListTile key={`image-${storeID}-${orderID}`}>
+            <img src={url} />
             <GridListTileBar
-              title={`Order Number: #Number`}
-              subtitle={
-                <div>
-                  <div>Customer Name: #Name</div>
-                  <div style={{ marginTop: "5px" }}>Store: #Store Number</div>
-                </div>
-              }
+              title={`Order ID: ${orderID}`}
+              subtitle={<span>Store: {storeID}</span>}
               actionIcon={
                 <IconButton
-                  aria-label={`info about ${id}`}
+                  aria-label={`info about ${orderID}`}
                   className={icon}
-                  onClick={() =>
-                    downloadFile(
-                      download_url,
-                      Math.floor(Math.random() * 10000),
-                      String(Math.floor(Math.random() * 2) + 1)
-                    )
-                  }
+                  onClick={() => downloadFile(url, orderID, storeID, name)}
                   disabled={downloading}
                 >
                   <GetAppIcon />
