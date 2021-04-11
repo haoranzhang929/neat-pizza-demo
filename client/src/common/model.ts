@@ -4,3 +4,8 @@ export interface Image {
   url: string;
   name: string;
 }
+
+export interface Store {
+  storeID: number;
+  name: string;
+}
