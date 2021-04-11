@@ -16,6 +16,8 @@ const { baseUrl } = config.get<ServiceConfig>(Config.Service);
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
+let stores: { storeID: number; name: string }[] = [];
+
 const validate = (orderID: string, phoneNumber: string, storeID: string) =>
   axios.post(`${baseUrl}/images/validate`, JSON.stringify({ orderID, phoneNumber, storeID }));
 
@@ -77,6 +79,21 @@ app.get("/api/images", async (req, res) => {
     res.json(imagesRes.data);
   } catch (error) {
     res.status(500).send({ errorMessage: "Error retrieving images" });
+  }
+});
+
+app.get("/api/stores", async (_req, res) => {
+  if (stores.length > 0) {
+    res.json(stores);
+    return;
+  } else {
+    try {
+      const storesRes = await axios.get<{ StoreId: number; Name: string }[]>(`${baseUrl}/stores`);
+      stores = storesRes.data.map(({ StoreId, Name }) => ({ storeID: StoreId, name: Name }));
+      res.json(stores);
+    } catch (error) {
+      res.status(500).send({ errorMessage: "Error retrieving stores" });
+    }
   }
 });
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
@@ -12,17 +11,17 @@ import DeleteModal from "./DeleteModal";
 import Footer from "./Footer";
 import { useStyles } from "./index.style";
 
-import { Image } from "../common/model";
+import { Image, Store } from "../common/model";
 import { useInterval } from "../common/useInterval";
 import Logo from "../assets/Logo.png";
-
-const fetchImages = async (store: number) => await axios.get<Image[]>(`/api/images?store=${store}`);
+import { fetchImages, fetchStoreList } from "../service/fetch";
 
 const ImagesViewer = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   const { container, header, logo, logoSmall } = useStyles();
 
+  const [storeList, setStoreList] = useState<Store[]>();
   const [images, setImages] = useState<Image[]>();
   const [selectedStore, setSelectedStore] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,6 +48,7 @@ const ImagesViewer = () => {
         .catch(error => {
           console.error(error);
           setImages(undefined);
+          setIsLoading(false);
         });
     } else {
       setImages(undefined);
@@ -58,6 +58,20 @@ const ImagesViewer = () => {
   useEffect(() => {
     geImages();
   }, [selectedStore]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchStoreList()
+      .then(res => {
+        setStoreList(res.data);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setStoreList(undefined);
+        setIsLoading(false);
+      });
+  }, []);
 
   useInterval(async () => {
     console.log("refresh every 30 seconds");
@@ -82,6 +96,7 @@ const ImagesViewer = () => {
             <img className={matches ? logoSmall : logo} src={Logo} alt="Neat Pizza Logo" />
           </header>
           <ImagesViewerActions
+            storeList={storeList}
             selectedStore={selectedStore}
             isLoading={isLoading}
             handleRefresh={store => {

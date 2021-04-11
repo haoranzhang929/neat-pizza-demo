@@ -8,8 +8,10 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import Typography from "@material-ui/core/Typography";
 
 import { ButtonText } from "../common/enum";
+import { Store } from "../common/model";
 
 interface ImagesViewerActionsProps {
+  storeList: Store[] | undefined;
   selectedStore: number;
   isLoading: boolean;
   handleSelectStore: (selectedStore: number) => void;
@@ -17,7 +19,7 @@ interface ImagesViewerActionsProps {
 }
 
 const ImagesViewerActions = (props: ImagesViewerActionsProps) => {
-  const { selectedStore, isLoading, handleSelectStore, handleRefresh } = props;
+  const { storeList, selectedStore, isLoading, handleSelectStore, handleRefresh } = props;
   return (
     <>
       <FormControl
@@ -36,8 +38,11 @@ const ImagesViewerActions = (props: ImagesViewerActionsProps) => {
           onChange={e => handleSelectStore(Number(e.target.value))}
         >
           <MenuItem value={0}>Select a Store</MenuItem>
-          <MenuItem value={1}>Store 1</MenuItem>
-          <MenuItem value={2}>Store 2</MenuItem>
+          {storeList?.map(({ storeID, name }) => (
+            <MenuItem key={storeID} value={storeID}>
+              {name}
+            </MenuItem>
+          ))}
         </Select>
         <Button
           color="primary"
