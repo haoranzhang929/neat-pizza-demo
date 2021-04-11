@@ -23,7 +23,7 @@ import { useStyles as useStyleRoot } from "./index.style";
 import { Severity, Message, ButtonText } from "../common/enum";
 import { DELAY } from "../common/constant";
 import Logo from "../assets/Logo.png";
-import { fetchStoreList, upload } from "../service/fetch";
+import { upload } from "../service/fetch";
 
 const ImageUploader = () => {
   const { mainApp, note, note2, wrapper, buttonSuccess, buttonProgress, userInput } = useStyles();
@@ -57,10 +57,7 @@ const ImageUploader = () => {
   };
 
   const handleUpload = async () => {
-    const storeNumber = Number(store);
-    const res = await fetchStoreList();
-    const storeList = res.data.map(d => d.storeID);
-    if (!store || isNaN(storeNumber) || !storeList.includes(storeNumber)) {
+    if (!store || isNaN(Number(store))) {
       setMessage(Message.StoreNotValid);
     } else if (!orderId || isNaN(Number(orderId))) {
       setMessage(Message.OrderIdNotValid);
@@ -80,17 +77,20 @@ const ImageUploader = () => {
             }
           })
           .catch(err => {
-            console.error(err);
-            if (err.response.data.errorMessage === "Order ID Expired") {
+            if (
+              err.response.data.errorMessage === "Order ID Expired" ||
+              err.response.data.errorMessage === "It's a bit too late, your pizza is on the way"
+            ) {
               setMessage(Message.OrderIdExpired);
-              setIsUploading(false);
-            } else if (err.response.data.errorMessage === "Validate Error") {
+            } else if (
+              err.response.data.errorMessage === "Validate Error" ||
+              err.response.data.errorMessage === "Phone number doesn't match"
+            ) {
               setMessage(Message.ValidateError);
-              setIsUploading(false);
             } else {
               setMessage(Message.UploadError);
-              setIsUploading(false);
             }
+            setIsUploading(false);
           });
       } else {
         setMessage(Message.NoImage);
