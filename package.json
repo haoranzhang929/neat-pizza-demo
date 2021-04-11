@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "rm -rf dist/ && npm run build && npm run start:prod",
+    "start": "npm run build && npm run start:prod",
     "start:server": "node ./dist/index",
     "start:prod": "NODE_ENV=production pm2 start ./dist/index.js",
-    "kill:prod": "pm2 stop 0 && pm2 del 0",
+    "kill:prod": "pm2 stop 0 && pm2 del 0 && rm -rf dist/",
     "dev": "npm run typecheck && concurrently \"npm run server\" \"npm run client\"",
     "test": "npm run test --prefix client",
     "test:watch": "npm run test:watch --prefix client",
