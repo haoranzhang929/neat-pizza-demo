@@ -12,7 +12,7 @@ import DeleteModal from "./DeleteModal";
 import Footer from "./Footer";
 import { useStyles } from "./index.style";
 
-import { Image, ItemToDelete } from "../common/model";
+import { Image } from "../common/model";
 import { useInterval } from "../common/useInterval";
 import Logo from "../assets/Logo.png";
 
@@ -27,15 +27,15 @@ const ImagesViewer = () => {
   const [selectedStore, setSelectedStore] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<ItemToDelete>();
+  const [itemToDelete, setItemToDelete] = useState<string>();
 
   const handleModalStatus = (isOpen: boolean) => {
     setModalOpen(isOpen);
   };
 
-  const handleDelete = (item: ItemToDelete) => {
+  const handleDelete = (name: string) => {
     handleModalStatus(true);
-    setItemToDelete(item);
+    setItemToDelete(name);
   };
 
   const geImages = () => {
