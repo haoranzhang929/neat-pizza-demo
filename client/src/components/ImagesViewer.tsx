@@ -76,7 +76,7 @@ const ImagesViewer = () => {
 
   return (
     <div>
-      <Container component="main" maxWidth="md">
+      <Container component="main" maxWidth="lg">
         <div className={container}>
           <header className={header}>
             <img className={matches ? logoSmall : logo} src={Logo} alt="Neat Pizza Logo" />
