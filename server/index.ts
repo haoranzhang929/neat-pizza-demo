@@ -18,7 +18,7 @@ const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
 // use morgan logging
-app.use(morgan("tiny"));
+app.use(morgan("combined"));
 
 let stores: { storeID: number; name: string }[] = [];
 
