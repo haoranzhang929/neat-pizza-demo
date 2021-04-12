@@ -19,7 +19,7 @@ import { fetchImages, fetchStoreList } from "../service/fetch";
 const ImagesViewer = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
-  const { container, header, logo, logoSmall } = useStyles();
+  const { rootStaff, container, header, logo, logoSmall } = useStyles();
 
   const [storeList, setStoreList] = useState<Store[]>();
   const [images, setImages] = useState<Image[]>();
@@ -89,7 +89,7 @@ const ImagesViewer = () => {
   }, 30000); // refresh every 30 seconds
 
   return (
-    <div>
+    <div className={rootStaff}>
       <Container component="main" maxWidth="lg">
         <div className={container}>
           <header className={header}>
