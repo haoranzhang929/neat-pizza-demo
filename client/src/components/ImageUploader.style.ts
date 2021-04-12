@@ -19,6 +19,12 @@ export const useStyles = makeStyles(({ spacing }) => ({
     marginBottom: spacing(2),
     color: "rgba(0, 0, 0, 0.6)"
   },
+  caption: {
+    width: "60%",
+    minWidth: "300px",
+    marginBottom: spacing(2),
+    color: "rgba(0, 0, 0, 0.6)"
+  },
   note2: {
     width: "90%",
     minWidth: "300px",

@@ -19,7 +19,8 @@ export enum Message {
   OrderIdNotValid = "Order ID is not valid",
   OrderIdExpired = "Apologies, unfortunately you had exceeded the preset time limit of 3 minutes within order completion for image uploading. Customised image printing will not be available for your current order, please try again on your next available order. Thank you",
   ValidateError = "Something went wrong, please check if the phone number is correct",
-  TooLate = "It's a bit too late, your pizza is on the way"
+  TooLate = "It's a bit too late, your pizza is on the way",
+  ImageTooBig = "The selected image is too large to upload"
 }
 
 export enum ButtonText {

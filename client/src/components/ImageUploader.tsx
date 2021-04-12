@@ -26,7 +26,16 @@ import Logo from "../assets/Logo.png";
 import { upload } from "../service/fetch";
 
 const ImageUploader = () => {
-  const { mainApp, note, note2, wrapper, buttonSuccess, buttonProgress, userInput } = useStyles();
+  const {
+    mainApp,
+    note,
+    caption,
+    note2,
+    wrapper,
+    buttonSuccess,
+    buttonProgress,
+    userInput
+  } = useStyles();
   const { rootCustomer, container, header, logo, logoSmall } = useStyleRoot();
   const { store, orderId } = useParams<{
     store: string | undefined;
@@ -130,7 +139,13 @@ const ImageUploader = () => {
             />
           )}
           <div className={mainApp}>
-            {!success && <ImageUpload handleSelectImage={handleSelectImage} success={success} />}
+            {!success && (
+              <ImageUpload
+                handleSelectImage={handleSelectImage}
+                success={success}
+                setMessage={(message: Message | undefined) => setMessage(message)}
+              />
+            )}
             {imageToUpload && <ImagePreview imageToUpload={imageToUpload} />}
             <TextField
               className={userInput}
@@ -171,6 +186,16 @@ const ImageUploader = () => {
               </Button>
               {isUploading && <CircularProgress size={24} className={buttonProgress} />}
             </div>
+            <Typography variant="caption" className={caption}>
+              *by clicking the upload button, you have read, understood and agreed with the{" "}
+              <a
+                href="https://www.flipdish.com/ie/privacy-policy/"
+                rel="noreferrer"
+                target="_blank"
+              >
+                privacy policy statement.
+              </a>
+            </Typography>
             <Typography variant="body2" className={note2}>
               Image uploading guidelines: We apply a surprise Neat Pizza filter graphic to your
               photo upload and this final image will be attached to your personalised pizza box in a

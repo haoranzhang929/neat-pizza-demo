@@ -14,8 +14,10 @@ const { host, port } = config.get<ServerConfig>(Config.Server);
 const appEnv = config.get<AppEnv>(Config.AppEnv);
 const { baseUrl } = config.get<ServiceConfig>(Config.Service);
 
+const SIZE_LIMIT = 5 * 1024 * 1024; // 5mb limit
+
 const app = express();
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: SIZE_LIMIT } });
 
 // use morgan logging
 app.use(morgan("combined"));
