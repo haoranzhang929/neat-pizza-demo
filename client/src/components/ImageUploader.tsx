@@ -27,7 +27,7 @@ import { upload } from "../service/fetch";
 
 const ImageUploader = () => {
   const { mainApp, note, note2, wrapper, buttonSuccess, buttonProgress, userInput } = useStyles();
-  const { root, container, header, logo, logoSmall } = useStyleRoot();
+  const { rootCustomer, container, header, logo, logoSmall } = useStyleRoot();
   const { store, orderId } = useParams<{
     store: string | undefined;
     orderId: string | undefined;
@@ -107,7 +107,7 @@ const ImageUploader = () => {
   };
 
   return (
-    <div className={root}>
+    <div className={rootCustomer}>
       <Container component="main" maxWidth="sm">
         <div className={container}>
           <header className={header}>
@@ -172,14 +172,15 @@ const ImageUploader = () => {
               {isUploading && <CircularProgress size={24} className={buttonProgress} />}
             </div>
             <Typography variant="body2" className={note2}>
-              Image uploading guideline: Your image upload will be applied with a surprising filter
-              processing element. The final outcome will be attached to your personalised pizza box
-              in a 3.5” by 3.5” inch square printed photo. Please choose a close up picture and the
-              filter image processing result will be ideal with a single person image or group
-              picture with no more than 3 people. By uploading this image, you authorise the right
-              of usage of the image to be printed and personalised solely for pizza ordering
-              purpose. Neat Pizza will not store or maintain any images and will not use them for
-              other purpose other than the sole purpose of personalising your pizza box.
+              Image uploading guidelines: We apply a surprise Neat Pizza filter graphic to your
+              photo upload and this final image will be attached to your personalised pizza box in a
+              3.5” by 3.5” inch square printed photo. To make sure your photograph can be printed,
+              please upload a close-up of your face (a selfie will do!). The Neat Pizza filter
+              results will work best with an image of one person, however a group picture with up to
+              three people will also work. By uploading this image, you authorise the right of usage
+              of the image to be printed and personalised solely for pizza ordering purpose. Neat
+              Pizza will not store or maintain any images submitted, and will not use them for other
+              purpose other than the sole use of personalising your Neat pizza box.
             </Typography>
           </div>
 

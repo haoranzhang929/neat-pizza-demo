@@ -30,14 +30,14 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 const PageNotFound = () => {
   const { page404, button } = useStyles();
-  const { root, container, header, logo, logoSmall } = useStyleRoot();
+  const { rootCustomer, container, header, logo, logoSmall } = useStyleRoot();
 
   const history = useHistory();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <div className={root}>
+    <div className={rootCustomer}>
       <Container component="main" maxWidth="sm">
         <div className={container}>
           <header className={header}>
