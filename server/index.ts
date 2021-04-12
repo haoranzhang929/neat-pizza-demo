@@ -55,6 +55,7 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
       res.status(400).send({ errorMessage: message });
       return;
     } else {
+      console.error({ message: "error validating request", error });
       res.status(400).send({ errorMessage: "Validate Error" });
       return;
     }
@@ -78,6 +79,7 @@ app.post("/api/image", upload.single("image"), async (req, res) => {
     });
     res.send("ok");
   } catch (error) {
+    console.error({ message: "error uploading image", error });
     res.status(500).send({ errorMessage: "Error Uploading Image" });
   }
 });
@@ -91,6 +93,7 @@ app.get("/api/images", async (req, res) => {
     >(`${baseUrl}/images/stores/${store}`);
     res.json(imagesRes.data);
   } catch (error) {
+    console.error({ message: "error fetching images", error });
     res.status(500).send({ errorMessage: "Error retrieving images" });
   }
 });
@@ -105,6 +108,7 @@ app.get("/api/stores", async (_req, res) => {
       stores = storesRes.data.map(({ StoreId, Name }) => ({ storeID: StoreId, name: Name }));
       res.json(stores);
     } catch (error) {
+      console.error({ message: "error fetching stores", error });
       res.status(500).send({ errorMessage: "Error retrieving stores" });
     }
   }
@@ -122,6 +126,7 @@ app.delete("/api/images", async (req, res) => {
     });
     res.send("ok");
   } catch (error) {
+    console.error({ message: "error deleting image", error });
     res.status(500).send({ errorMessage: "Error deleting images" });
   }
 });
