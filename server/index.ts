@@ -5,6 +5,9 @@ import config from "config";
 import axios from "axios";
 import FormData from "form-data";
 import morgan from "morgan";
+import fs from "fs";
+import http from "http";
+import https from "https";
 
 import { ServerConfig, ServiceConfig } from "./common/model";
 import { Config, AppEnv } from "./common/enum";
@@ -145,6 +148,28 @@ if (appEnv === AppEnv.Prod) {
   });
 }
 
-app.listen(port, () => {
+const httpServer = http.createServer(app);
+
+httpServer.listen(port, () => {
   console.log(`Server is running on http://${host}:${port}`);
 });
+
+if (appEnv === AppEnv.Prod) {
+  // Certificate
+  const privateKey = fs.readFileSync("/etc/letsencrypt/live/img.neatpizza.com/privkey.pem", "utf8");
+  const certificate = fs.readFileSync("/etc/letsencrypt/live/img.neatpizza.com/cert.pem", "utf8");
+  const ca = fs.readFileSync("/etc/letsencrypt/live/img.neatpizza.com/chain.pem", "utf8");
+
+  const httpsServer = https.createServer(
+    {
+      key: privateKey,
+      cert: certificate,
+      ca: ca
+    },
+    app
+  );
+
+  httpsServer.listen(443, () => {
+    console.log(`Server is running on https://${host}:443`);
+  });
+}
