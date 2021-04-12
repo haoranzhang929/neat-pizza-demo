@@ -1,10 +1,17 @@
 import { makeStyles } from "@material-ui/core/styles";
-import BackGround from "../assets/bg.webp";
+import bgCustomer from "../assets/bg-customer.webp";
+import bgStaff from "../assets/bg-staff.webp";
 
 export const useStyles = makeStyles(({ spacing }) => ({
-  root: {
-    backgroundImage: `url(${BackGround})`,
-    backgroundPosition: "center top",
+  rootCustomer: {
+    backgroundImage: `url(${bgCustomer})`,
+    backgroundPosition: "center center",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat"
+  },
+  rootStaff: {
+    backgroundImage: `url(${bgStaff})`,
+    backgroundPosition: "center center",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat"
   },
