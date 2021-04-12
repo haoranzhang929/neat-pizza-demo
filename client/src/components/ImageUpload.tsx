@@ -6,20 +6,31 @@ import Typography from "@material-ui/core/Typography";
 
 import { useStyles } from "./ImageUpload.style";
 
+import { Message } from "../common/enum";
+import { SIZE_LIMIT } from "../common/constant";
+
 interface ImageUploadProps {
   handleSelectImage: (image: File) => void;
   success: boolean;
+  setMessage: (message: Message | undefined) => void;
 }
 
-const ImageUpload = ({ handleSelectImage, success }: ImageUploadProps) => {
+const ImageUpload = ({ handleSelectImage, success, setMessage }: ImageUploadProps) => {
   const { dropContainer, activeStyle, uploadSuccess } = useStyles();
 
   return (
     <Dropzone
       maxFiles={1}
       multiple={false}
-      onDrop={acceptedFiles => handleSelectImage(acceptedFiles[0])}
+      onDrop={acceptedFiles => {
+        setMessage(undefined);
+        handleSelectImage(acceptedFiles[0]);
+      }}
       disabled={success}
+      maxSize={SIZE_LIMIT}
+      onDropRejected={() => {
+        setMessage(Message.ImageTooBig);
+      }}
     >
       {({ getRootProps, getInputProps, isDragActive }) => (
         <section>
