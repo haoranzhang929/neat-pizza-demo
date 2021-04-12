@@ -4,6 +4,7 @@ import path from "path";
 import config from "config";
 import axios from "axios";
 import FormData from "form-data";
+import morgan from "morgan";
 
 import { ServerConfig, ServiceConfig } from "./common/model";
 import { Config, AppEnv } from "./common/enum";
@@ -15,6 +16,9 @@ const { baseUrl } = config.get<ServiceConfig>(Config.Service);
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
+
+// use morgan logging
+app.use(morgan("tiny"));
 
 let stores: { storeID: number; name: string }[] = [];
 
